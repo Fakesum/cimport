@@ -1,16 +1,29 @@
 import subprocess
+
+# a Console class
+# with command util
+# function
 class Console:
 
     @staticmethod
-    def _run_cmd(cmd):
+    def run_cmd(cmd):
+        """
+            Run a Command and return the consoles output
+        """
         return subprocess.run(cmd, stdout=subprocess.PIPE).stdout
     
     @staticmethod
-    def _is_cmd(cmd):
-        # OS Specific Code.
+    def is_cmd(cmd):
+        """
+            Return if command exists in console
+        """
         raise NotImplementedError
 
     @staticmethod
     def _required_cmd(cmd):
-        if not (Console._is_cmd(cmd)):
+        """
+            Check and raise error if comamnd
+            does not exists in console.
+        """
+        if not (Console.is_cmd(cmd)):
             raise RuntimeError(f"Please Install {cmd} to be able to use {__name__} {__version__}")

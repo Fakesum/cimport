@@ -7,7 +7,7 @@ FunctionRegex = re.compile(r'.type([^,]+)')
 
 
 def _is_cmd(cmd):
-    return _run_cmd(['which', cmd]) != f"{cmd} not found"
+    
 
 def import_program(filename: pathlib.Path | str, cpp=True, flags=[[], []]):
     if (not os.path.exists(os.path.join("__pycache__", f"""{filename.split(".")[0]}.s"""))) or (open(f"__pycache__/{filename.split('.')[0]}.ver").read() != open(filename).read()):
