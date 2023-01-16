@@ -2,7 +2,7 @@ import os
 import pathlib
 import re
 
-FunctionRegex = re.compile(r'.type([^,]+)')
+
 
 
 def import_program(filename: pathlib.Path | str, cpp=True, flags=[[], []]):
