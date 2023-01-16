@@ -1,5 +1,7 @@
 import subprocess
 
+from .. import __version__, __name__
+
 # a Console class
 # with command util
 # function
