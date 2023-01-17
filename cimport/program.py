@@ -2,21 +2,25 @@ import re
 import ctypes
 
 class Program(dict):
-    def __init__(self, filename, function_names):
+    def __init__(self, filename, func_names):
         self._program = ctypes.cdll.LoadLibrary(filename)
-        
-        for func in function_names:
-            self.__dict__[func] = exec(f"self._program.{func}")
+        self.names = func_names
         
         super().__init__()
-        print(self.__dict__)
     
-    def __getitem__(self, key):
+    def get(self, key):
+        if (key != "names") and (key != "_program") and (key in self.__dict__):
+            return self.__dict__[key]
+        
         func_regex = re.compile(key)
 
-        for val in self.__dict__.values():
-            found_func = func_regex.findall(val)
-
-            if found_func.__len__() == 0:
-                raise SyntaxError("Function Not found")
-        return [self.__dict__[func] for func in found_func]
+        for name in self.names:
+            if func_regex.findall(name).__len__() == 1:
+                res = self._program.__getitem__(name)
+                self.__dict__[name] = res
+                return res
+        
+        raise SyntaxError(f"Did not find function {key}")
+            
+    def __getattr__(self, key):
+        self.get(key)

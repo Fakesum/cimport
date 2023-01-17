@@ -7,7 +7,11 @@ import re
 FunctionRegex = re.compile(r'.type([^,]+)')
 
 def find_functions(filename):
-    return [func.replace("\t", "") for func in FunctionRegex.findall(open(f"__pycache__/{filename.split('.')[0]}.s").read())]
+    return [func.replace("\t", "") for func in FunctionRegex.findall(open(f"__pycache__/cimport/{filename.split('.')[0]}.s").read())]
+
+def require_file(filename):
+    if not os.path.exists(filename):
+        raise RuntimeError("File Does not exsit")
 
 def compile_c(filename, cpp, flags):
     compiler = ("g++" if cpp else "gcc")
@@ -18,15 +22,23 @@ def compile_c(filename, cpp, flags):
         console.required_cmd("g++")
         console.required_cmd("cp")
 
-        if not os.path.exists("__pycache__"):
-            os.makedirs("__pycache__")
+        if not os.path.exists("__pycache__/cimport"):
+            os.makedirs("__pycache__/cimport")
         
-        console.run_cmd([compiler, "-S", "-o", f'__pycache__/{filename.split(".")[0]}.s', filename, *flags[0]])
-        console.run_cmd([compiler, *flags[1], "-o", f"__pycache__/{filename.split('.')[0]}"])
-        
-        console.run_cmd(["cp", "-rf", filename, f"__pycache__/{filename.split('.')[0]}.ver"])
+        console.run_cmd([compiler, "-S", "-o", f'__pycache__/cimport/{filename.split(".")[0]}.s', filename, *flags[0]])
+        require_file(f'__pycache__/cimport/{filename.split(".")[0]}.s')
+
+        console.run_cmd([compiler, "-c", "-fPIC",filename, *flags[1], "-o", f"__pycache__/cimport/{filename.split('.')[0]}.o"])
+        require_file(f'__pycache__/cimport/{filename.split(".")[0]}.o')
+
+        console.run_cmd([compiler, f"__pycache__/cimport/{filename.split('.')[0]}.o", "-shared", "-o",f"__pycache__/cimport/{filename.split('.')[0]}.compiled"])
+        require_file(f'__pycache__/cimport/{filename.split(".")[0]}.compiled')
+
+        console.run_cmd(["rm", "-rf", f"__pycache__/cimport/{filename.split('.')[0]}.o"])
+
+        console.run_cmd(["cp", "-rf", filename, f"__pycache__/cimport/{filename.split('.')[0]}.ver"])
     
     else:
         raise NotImplementedError("Comming Soon, Sry") #TODO
     
-    return Program(filename.split('.')[0], find_functions(filename))
+    return Program(f"__pycache__/cimport/{filename.split('.')[0]}.compiled", find_functions(filename))
