@@ -8,3 +8,4 @@ language code.
 - [ ] Find functions by name using dict api.
 - [ ] figure out regex for calling function from a c++-class.
 - [ ] figure out regex for calling function from a c-class.
+- [ ] Docs
