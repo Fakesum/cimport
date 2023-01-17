@@ -7,25 +7,23 @@ from .. import __version__, __name__
 # function
 class Console:
 
-    @staticmethod
-    def run_cmd(cmd):
+    def run_cmd(self, cmd):
         """
             Run a Command and return the consoles output
         """
         return subprocess.run(cmd, stdout=subprocess.PIPE).stdout
     
-    @staticmethod
-    def is_cmd(cmd):
+    def is_cmd(self, cmd):
         """
-            Return if command exists in console
+            This function differs for windows and linux
+            and is to be defined by inherited calss.
         """
         raise NotImplementedError
-
-    @staticmethod
-    def _required_cmd(cmd):
+    
+    def required_cmd(self, cmd):
         """
             Check and raise error if comamnd
             does not exists in console.
         """
-        if not (Console.is_cmd(cmd)):
+        if not (self.is_cmd(cmd)):
             raise RuntimeError(f"Please Install {cmd} to be able to use {__name__} {__version__}")
