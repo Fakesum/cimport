@@ -1,5 +1,6 @@
 from .command.linux import ConsoleLinux
 from .command.window import ConsoleWindow
+from .program import Program
 import os
 import re
 
@@ -11,19 +12,21 @@ def find_functions(filename):
 def compile_c(filename, cpp, flags):
     compiler = ("g++" if cpp else "gcc")
     if os.name == "posix":
-        ConsoleLinux.required_cmd("gcc")
-        ConsoleLinux.required_cmd("g++")
-        ConsoleLinux.required_cmd("cp")
+        console = ConsoleLinux()
+
+        console.required_cmd("gcc")
+        console.required_cmd("g++")
+        console.required_cmd("cp")
 
         if not os.path.exists("__pycache__"):
             os.makedirs("__pycache__")
         
-        ConsoleLinux.run_cmd([compiler, "-S", "-o", f'__pycache__/{filename.split(".")[0]}.s', filename, *flags[0]])
-        ConsoleLinux.run_cmd([compiler, *flags[1], "-o", f"__pycache__/{filename.split('.')[0]}"])
+        console.run_cmd([compiler, "-S", "-o", f'__pycache__/{filename.split(".")[0]}.s', filename, *flags[0]])
+        console.run_cmd([compiler, *flags[1], "-o", f"__pycache__/{filename.split('.')[0]}"])
         
-        ConsoleLinux.run_cmd(["cp", "-rf", filename, f"__pycache__/{filename.split('.')[0]}.ver"])
+        console.run_cmd(["cp", "-rf", filename, f"__pycache__/{filename.split('.')[0]}.ver"])
     
     else:
-        raise NotImplementedError("Comming Soon, Sry")
+        raise NotImplementedError("Comming Soon, Sry") #TODO
     
-    find_functions(filename)
+    return Program(filename, find_functions(filename))
