@@ -3,7 +3,7 @@ import ctypes
 
 class Program(dict):
     def __init__(self, filename, function_names):
-        self._program = ctypes.LoadLibrary(filename)
+        self._program = ctypes.cdll.LoadLibrary(filename)
         
         for func in function_names:
             self.__dict__[func] = exec(f"self._program.{func}")

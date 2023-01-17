@@ -7,7 +7,7 @@ import re
 FunctionRegex = re.compile(r'.type([^,]+)')
 
 def find_functions(filename):
-    return [func.replace("\t", "").replace("_Z", "")[0:-1] for func in FunctionRegex.findall(open(f"__pycache__/{filename.split('.')[0]}.s").read())]
+    return [func.replace("\t", "") for func in FunctionRegex.findall(open(f"__pycache__/{filename.split('.')[0]}.s").read())]
 
 def compile_c(filename, cpp, flags):
     compiler = ("g++" if cpp else "gcc")
@@ -29,4 +29,4 @@ def compile_c(filename, cpp, flags):
     else:
         raise NotImplementedError("Comming Soon, Sry") #TODO
     
-    return Program(filename, find_functions(filename))
+    return Program(filename.split('.')[0], find_functions(filename))
