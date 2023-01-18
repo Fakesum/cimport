@@ -2,24 +2,6 @@ from ..command.linux import ConsoleLinux
 from ..command.window import ConsoleWindow
 from .program import RustProgram
 import os
-import re
-
-FunctionRegex = re.compile(r'.type([^,]+)')
-
-def find_function(filename):
-    return [func.replace("\t", "") for func in FunctionRegex.findall(open(f"__pycache__/cimport/{filename}.s").read())]
-
-def pre_processor(filename):
-    file = open(filename, "rw")
-    lines = file.readlines()
-
-    for line in enumerate(lines):
-        if (line.count("fn") == 1) and (not (lines[line[0]-1] != "#[no_mangle]")):
-            lines.insert(line[0]-1, "#[no_mangle]")
-    
-    if lines != file.readlines():
-        print("Modifying File, since no_mangle is required for function to be accessable")
-        file.write("\n".join(lines))
 
 def compile_rs(filename):
     if os.name == "posix":
@@ -64,5 +46,3 @@ def compile_rs(filename):
         ])
     else:
         raise NotImplementedError("Comming Soon, Sry") #TODO
-    
-    return RustProgram(f"__pycache__/cimport/{filename}.compiled")
