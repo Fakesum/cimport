@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 from .. import __version__, __name__
 
@@ -27,3 +28,10 @@ class Console:
         """
         if not (self.is_cmd(cmd)):
             raise RuntimeError(f"Please Install {cmd} to be able to use {__name__} {__version__}")
+    
+    def require_file(filename):
+        """
+            raise Error if file does not exist
+        """
+        if not os.path.exists(filename):
+            raise RuntimeError(f"File {filename} does not exist")
