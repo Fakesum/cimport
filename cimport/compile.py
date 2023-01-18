@@ -11,7 +11,7 @@ def find_functions(filename):
 
 def require_file(filename):
     if not os.path.exists(filename):
-        raise RuntimeError("File Does not exsit")
+        raise RuntimeError("Failed to compile, try giving flags for gcc/msvc")
 
 def compile_c(filename, cpp, flags):
     compiler = ("g++" if cpp else "gcc")
@@ -25,16 +25,16 @@ def compile_c(filename, cpp, flags):
         if not os.path.exists("__pycache__/cimport"):
             os.makedirs("__pycache__/cimport")
         
-        console.run_cmd([compiler, "-S", "-o", f'__pycache__/cimport/{filename.split(".")[0]}.s', filename, *flags[0]])
-        require_file(f'__pycache__/cimport/{filename.split(".")[0]}.s')
 
-        console.run_cmd([compiler, "-c", "-fPIC",filename, *flags[1], "-o", f"__pycache__/cimport/{filename.split('.')[0]}.o"])
+        console.run_cmd([compiler, "-c", "-fPIC", "-save-temps=obj", filename, *flags[1], "-o", f"__pycache__/cimport/{filename.split('.')[0]}.o"])
+        require_file(f'__pycache__/cimport/{filename.split(".")[0]}.s')
         require_file(f'__pycache__/cimport/{filename.split(".")[0]}.o')
 
         console.run_cmd([compiler, f"__pycache__/cimport/{filename.split('.')[0]}.o", "-shared", "-o",f"__pycache__/cimport/{filename.split('.')[0]}.compiled"])
         require_file(f'__pycache__/cimport/{filename.split(".")[0]}.compiled')
 
         console.run_cmd(["rm", "-rf", f"__pycache__/cimport/{filename.split('.')[0]}.o"])
+        console.run_cmd(["rm", "-rf", f"__pycache__/cimport/{filename.split('.')[0]}.ii"])
 
         console.run_cmd(["cp", "-rf", filename, f"__pycache__/cimport/{filename.split('.')[0]}.ver"])
     
