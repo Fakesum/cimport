@@ -31,13 +31,16 @@ class CppProgram(dict):
                         self.__dict__[key].argtypes.append(ctypes.c_char)
                     
                 self.__dict__[key].argtypes = tuple(self.__dict__[key].argtypes)
-
+        
                 return self.__dict__[key]
     def __setattr__(self, __name: str, __value: typing.Any) -> None:
         self.__dict__[__name] = __value
             
     def __getattr__(self, key):
         return self.get(key)
+    
+    def restype(self, key, _type):
+        self.__dict__[key].restype = _type
 
 class CProgram:
     def __init__(self, filename):
