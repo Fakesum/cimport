@@ -1,6 +1,6 @@
 from .command.linux import ConsoleLinux
 from .command.window import ConsoleWindow
-from .program import Program
+from .program import CppProgram
 import os
 import re
 
@@ -41,4 +41,4 @@ def compile_c(filename, cpp, flags):
     else:
         raise NotImplementedError("Comming Soon, Sry") #TODO
     
-    return Program(f"__pycache__/cimport/{filename.split('.')[0]}.compiled", find_functions(filename))
+    return CppProgram(f"__pycache__/cimport/{filename.split('.')[0]}.compiled", find_functions(filename))

@@ -4,7 +4,7 @@ import typing
 
 THRESHOLD = 50
 
-class Program(dict):
+class CppProgram(dict):
     def __init__(self, filename, func_names: list[str]):
         self._program = ctypes.cdll.LoadLibrary(filename)
         self.names: list[str] = func_names
