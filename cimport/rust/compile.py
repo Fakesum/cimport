@@ -1,6 +1,5 @@
 from ..command.linux import ConsoleLinux
 from ..command.window import ConsoleWindow
-from .program import RustProgram
 import os
 
 def compile_rs(filename):
@@ -10,14 +9,19 @@ def compile_rs(filename):
         console.required_cmd("rustc")
         console.required_cmd("gcc")
 
+        if not (os.path.exists("__pycache__/cimport/")):
+            os.makedirs("__pycache__/cimport/")
+
         console.run_cmd([
             f"rustc", 
             filename, 
             "-o",
-            f"__pycache__/cimport/{filename}",
+            f"__pycache__/cimport/{filename.split('.')[0]}",
             "--emit=obj", "--emit=asm",
             "--crate-type=lib"
         ])
+        
+        filename = filename.split('.')[0]
 
         console.require_file(f"__pycache__/cimport/{filename}.o")
         console.require_file(f"__pycache__/cimport/{filename}.s")
@@ -41,7 +45,7 @@ def compile_rs(filename):
         console.run_cmd([
             "cp",
             "-rf",
-            filename,
+            f"{filename}.rs",
             f"__pycache__/cimport/{filename}.ver"
         ])
     else:

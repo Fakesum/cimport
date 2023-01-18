@@ -29,7 +29,7 @@ class Console:
         if not (self.is_cmd(cmd)):
             raise RuntimeError(f"Please Install {cmd} to be able to use {__name__} {__version__}")
     
-    def require_file(filename):
+    def require_file(self, filename):
         """
             raise Error if file does not exist
         """
