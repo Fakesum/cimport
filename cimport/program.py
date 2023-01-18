@@ -1,37 +1,38 @@
 import ctypes
 import typing
-from fuzzywuzzy.fuzz import ratio as fuzz
+# from fuzzywuzzy.fuzz import ratio as fuzz
 
 THRESHOLD = 50
 
 class Program(dict):
-    def __init__(self, filename, func_names):
+    def __init__(self, filename, func_names: list[str]):
         self._program = ctypes.cdll.LoadLibrary(filename)
-        self.names = func_names
+        self.names: list[str] = func_names
         
         super().__init__()
-    
-    # def find_type(self, key, name):
-    #     self.name
-    
+        
     def get(self, key):
         if (key != "names") and (key != "_program") and (key in self.__dict__):
             return self.__dict__[key]
         
-        match = []
         for name in self.names:
-            match_percentage = fuzz(name, key)
-            if match_percentage > THRESHOLD:
-                match.append([match_percentage, name])
-        
-        if match.__len__() != 0:
-            name = max(match)[1]
-            self.__dict__[key] = self._program.__getitem__(name)
-            # self.find_type(key, name)
-            return self.__dict__[key]
-        else:    
-            raise SyntaxError(f"Did not find value {key}")
-    
+            f_name = name.replace("_Z", "").lstrip("0123456789")
+            if (f_name.__len__() > key.__len__()) and (f_name[:key.__len__()] == key):
+                self.__dict__[key] = self._program.__getitem__(name)
+                types = f_name.replace(key, "")
+                self.__dict__[key].argtypes = []
+
+                for _type in types:
+                    if _type == "i":
+                        self.__dict__[key].argtypes.append(ctypes.c_int)
+                    elif _type == "f":
+                        self.__dict__[key].argtypes.append(ctypes.c_float)
+                    elif _type == "c":
+                        self.__dict__[key].argtypes.append(ctypes.c_char)
+                    
+                self.__dict__[key].argtypes = tuple(self.__dict__[key].argtypes)
+
+                return self.__dict__[key]
     def __setattr__(self, __name: str, __value: typing.Any) -> None:
         self.__dict__[__name] = __value
             
