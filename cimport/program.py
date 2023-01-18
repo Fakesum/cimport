@@ -16,11 +16,10 @@ class Program(dict):
 
         for name in self.names:
             if func_regex.findall(name).__len__() == 1:
-                res = self._program.__getitem__(name)
-                self.__dict__[name] = res
-                return res
+                self.__dict__[key] = self._program.__getitem__(name) 
+                return self.__dict__[key]
         
         raise SyntaxError(f"Did not find function {key}")
             
     def __getattr__(self, key):
-        self.get(key)
+        return self.get(key)
