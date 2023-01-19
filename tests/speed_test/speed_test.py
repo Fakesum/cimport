@@ -8,15 +8,15 @@ def timeit(f):
 
 def c_test():
     c_program = timeit(lambda: c_import("speed_test.c"))
-    print("took", c_program[0], "seconds to load c program")
+    print("took", c_program[1], "seconds to load c program")
 
 def cpp_test():
     cpp_program = timeit(lambda: c_import("speed_test.cpp"))
-    print("took", cpp_program[0], "seconds to load c++ program")
+    print("took", cpp_program[1], "seconds to load c++ program")
 
 def rust_test():
     rust_program = timeit(lambda: c_import("speed_test.rs"))
-    print("took", rust_program[0], "seconds to load rust program")
+    print("took", rust_program[1], "seconds to load rust program")
 
 TESTS = [
     c_test,
