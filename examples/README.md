@@ -8,14 +8,8 @@ Curruntly Supported languages to use with python:
 
 # Index
 
-Examples for C++:
+Examples for C/C++:
 - (basic)
-- parameters
-- return_type
-- advanced
-
-Examples for C:
-- basic
 - parameters
 - return_type
 - advanced
