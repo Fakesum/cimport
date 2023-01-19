@@ -1,6 +1,6 @@
 import time
 from threading import Thread
-from cimport import c_import
+from cimport import c_import, rust_import
 
 def timeit(f):
     st = time.time()
@@ -15,7 +15,7 @@ def cpp_test():
     print("took", cpp_program[1], "seconds to load c++ program")
 
 def rust_test():
-    rust_program = timeit(lambda: c_import("speed_test.rs"))
+    rust_program = timeit(lambda: rust_import("speed_test.rs"))
     print("took", rust_program[1], "seconds to load rust program")
 
 TESTS = [
