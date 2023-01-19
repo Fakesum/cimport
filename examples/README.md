@@ -25,3 +25,4 @@ Examples for Rust:
 - parameters
 - return_type
 - advanced
+
