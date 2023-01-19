@@ -51,3 +51,6 @@ class CProgram:
     
     def __getattr__(self, __name: str):
         return self.get(__name)
+    
+    def restype(self, key, _type):
+        self._program.__getitem__(key).restype = _type
