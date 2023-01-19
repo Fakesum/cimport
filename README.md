@@ -6,7 +6,7 @@ a Foreign language Import library for python
 
 through pip stable:
 ```bash
-TODO.
+pip install cimport
 ```
 
 directly from github:
@@ -16,8 +16,7 @@ pip install get+https://github.com/Fakesum/cimport
 
 ## TODO
 
-- [ ] register pypi
 - [ ] Docs
 - [ ] examples
-- [ ] Tests
+- [x] Tests
 - [ ] Type-hinting
