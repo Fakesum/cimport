@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cimport"
+version = "0.0.2a"
+authors = [
+  { name="Fakesum", email="worldanvilbild+github@gmail.com" },
+]
+description = "a Foreign language Import library for python"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Fakesum/cimport"
+"Bug Tracker" = "https://github.com/Fakesum/cimport/issues"
