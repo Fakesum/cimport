@@ -3,15 +3,15 @@ from .compile import compile_rs
 from .program import RustProgram
 
 def pre_processor(filename):
-    lines = open(filename, "r+").readlines()
+    lines: list[str] = open(filename, "r+").read().split("\n")
+    n_file = ""
 
-    for line in enumerate(lines):
-        if (line[1].count("fn") > 0) and (lines[line[0]-1] != "#[no_mangle]"):
-            lines.insert((line[0]-1 if line[0] != 0 else 0), "#[no_mangle]")
+    for line in lines:
+        if line.startswith("fn") and ((lines.index(line) == 0) or (lines[lines.index(line)-1] != "#[no_mangle]")):
+            n_file += "#[no_mangle]\n"
+        n_file += line + "\n"
     
-    if lines != open(filename, "w+").readlines():
-        print("Modifying File, since no_mangle is required for function to be accessable")
-        open(filename, "w+").write("\n".join(lines))
+    open(filename, "w+").write(n_file)
 
 
 def rust_import(filename):
