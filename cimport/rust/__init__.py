@@ -1,12 +1,6 @@
 import os
-import re
 from .compile import compile_rs
 from .program import RustProgram
-
-FunctionRegex = re.compile(r'.type([^,]+)')
-
-def find_function(filename):
-    return [func.replace("\t", "") for func in FunctionRegex.findall(open(f"__pycache__/cimport/{filename}.s").read())]
 
 def pre_processor(filename):
     lines = open(filename, "r+").readlines()
