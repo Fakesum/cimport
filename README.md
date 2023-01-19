@@ -19,3 +19,5 @@ pip install get+https://github.com/Fakesum/cimport
 - [ ] register pypi
 - [ ] Docs
 - [ ] examples
+- [ ] Tests
+- [ ] Type-hinting
