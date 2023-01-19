@@ -33,6 +33,7 @@ def compile_c(filename, cpp, flags):
 
         console.run_cmd(["rm", "-rf", f"__pycache__/cimport/{filename}.o"])
         console.run_cmd(["rm", "-rf", f"__pycache__/cimport/{filename}.ii"])
+        console.run_cmd(["rm", "-rf", f"__pycache__/cimport/{filename}.i"])
 
         console.run_cmd(["cp", "-rf", filename, f"__pycache__/cimport/{filename}.ver"])
     
