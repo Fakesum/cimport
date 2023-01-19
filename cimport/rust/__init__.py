@@ -8,18 +8,16 @@ FunctionRegex = re.compile(r'.type([^,]+)')
 def find_function(filename):
     return [func.replace("\t", "") for func in FunctionRegex.findall(open(f"__pycache__/cimport/{filename}.s").read())]
 
-def pre_processor(filename): #FIXME: quarky open function behaviour
-    file = open(filename, "w+")
-    lines = file.readlines()
+def pre_processor(filename):
+    lines = open(filename, "r+").readlines()
 
     for line in enumerate(lines):
-        if (line.count("fn") == 1) and (not (lines[line[0]-1] != "#[no_mangle]")):
-            lines.insert(line[0]-1, "#[no_mangle]")
+        if (line[1].count("fn") > 0) and (lines[line[0]-1] != "#[no_mangle]"):
+            lines.insert((line[0]-1 if line[0] != 0 else 0), "#[no_mangle]")
     
-    print(lines)
-    if lines != file.readlines():
+    if lines != open(filename, "w+").readlines():
         print("Modifying File, since no_mangle is required for function to be accessable")
-        file.write("\n".join(lines))
+        open(filename, "w+").write("\n".join(lines))
 
 
 def rust_import(filename):
