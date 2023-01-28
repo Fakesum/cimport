@@ -9,7 +9,7 @@ def pre_processor(filename):
     for line in lines:
         if line.startswith("fn") and ((lines.index(line) == 0) or (lines[lines.index(line)-1] != "#[no_mangle]")):
             n_file += "#[no_mangle]\n"
-        n_file += line + ("\n" if line != "\n" else "")
+        n_file += line 
     
     open(filename, "w+").write(n_file)
 
