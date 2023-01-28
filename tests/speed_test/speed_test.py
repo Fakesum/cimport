@@ -17,10 +17,10 @@ def c_test():
 
     c_program = c_program[0]
 
-    run_test(c_program, "return_int")
+    print(c_program.return_int)
     run_test(c_program, "return_float")
     run_test(c_program, "return_double")
-    run_test(c_program, "return_string", ctypes.c_char)
+    run_test(c_program, "return_string", ctypes.c_char_p)
 
 def cpp_test():
     cpp_program = timeit(lambda: c_import("speed_test.cpp"))
@@ -31,7 +31,7 @@ def cpp_test():
     run_test(cpp_program, "return_int")
     run_test(cpp_program, "return_float")
     run_test(cpp_program, "return_double")
-    run_test(cpp_program, "return_string", ctypes.c_char)
+    run_test(cpp_program, "return_string", ctypes.c_char_p)
 
 def rust_test():
     rust_program = timeit(lambda: rust_import("speed_test.rs"))
@@ -41,7 +41,7 @@ def rust_test():
 
     run_test(rust_program, "return_int")
     run_test(rust_program, "return_float")
-    run_test(rust_program, "return_string", ctypes.c_char)
+    run_test(rust_program, "return_string", ctypes.c_char_p)
 
 TESTS = [
     c_test,
