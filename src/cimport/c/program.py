@@ -34,12 +34,9 @@ class CppProgram(dict):
                 self.__dict__[key].restype = res_type
         
                 return self.__dict__[key]
-    def __setattr__(self, __name: str, __value: typing.Any) -> None:
-        self.__dict__[__name] = __value
-            
     def __getattr__(self, key):
         return self.get(key)
-    
+
     def restype(self, key, _type):
         self.__dict__[key].restype = _type
 
@@ -47,14 +44,12 @@ class CProgram:
     def __init__(self, filename):
         self._program = ctypes.cdll.LoadLibrary(filename)
     
-    def get(self, name, _type = ctypes.c_int, arg_types: list = []):
-        
+    def get(self, name, _type = ctypes.c_int):
         func = None
         while func == None:
             func = self._program.__getitem__(name)
         
         func.restype = _type
-        func.argtypes = arg_types
         
         setattr(self, name, func)
         return func

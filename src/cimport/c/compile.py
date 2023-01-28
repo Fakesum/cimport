@@ -18,8 +18,10 @@ def compile_c(filename, cpp, flags):
         console.required_cmd("g++")
         console.required_cmd("cp")
 
-        if not os.path.exists("__pycache__/cimport"):
+        try:
             os.makedirs("__pycache__/cimport")
+        except:
+            pass
         
 
         console.run_cmd([compiler, "-c", "-fPIC", "-save-temps=obj", filename, *flags[1], "-o", f"__pycache__/cimport/{filename}.o"])
