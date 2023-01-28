@@ -46,11 +46,17 @@ class CProgram:
     def __init__(self, filename):
         self._program = ctypes.cdll.LoadLibrary(filename)
     
-    def get(self, name):
-        return self._program.__getitem__(name)
+    def get(self, name, _type = ctypes.c_int, arg_types: list = []):
+        
+        func = None
+        while func == None:
+            func = self._program.__getitem__(name)
+        
+        func.restype = _type
+        func.argtypes = arg_types
+        
+        setattr(self, name, func)
+        return func
     
     def __getattr__(self, __name: str):
         return self.get(__name)
-    
-    def restype(self, key, _type):
-        self._program.__getitem__(key).restype = _type
