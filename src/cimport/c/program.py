@@ -1,6 +1,5 @@
 import ctypes
 import typing
-# from fuzzywuzzy.fuzz import ratio as fuzz
 
 THRESHOLD = 50
 
@@ -11,7 +10,7 @@ class CppProgram(dict):
         
         super().__init__()
         
-    def get(self, key):
+    def get(self, key, _type = ctypes.c_int, arg_type = []):
         if (key != "names") and (key != "_program") and (key in self.__dict__):
             return self.__dict__[key]
         
@@ -29,7 +28,7 @@ class CppProgram(dict):
                         self.__dict__[key].argtypes.append(ctypes.c_float)
                     elif _type == "c":
                         self.__dict__[key].argtypes.append(ctypes.c_char)
-                    
+ 
                 self.__dict__[key].argtypes = tuple(self.__dict__[key].argtypes)
         
                 return self.__dict__[key]
@@ -53,7 +52,7 @@ class CProgram:
             func = self._program.__getitem__(name)
         
         func.restype = _type
-        func.argtypes = arg_types
+        func.argtypes = tuple(func.argtypes) if (arg_types == []) else arg_types
         
         setattr(self, name, func)
         return func
