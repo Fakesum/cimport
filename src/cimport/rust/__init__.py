@@ -1,6 +1,6 @@
 import os
 from .compile import compile_rs
-from .program import RustProgram
+from ..c.program import CProgram
 
 def pre_processor(filename):
     lines: list[str] = open(filename, "r+").read().split("\n")
@@ -17,4 +17,4 @@ def rust_import(filename):
     if (not os.path.exists(os.path.join("__pycache__/cimport", f"""{filename.split(".")[0]}.s"""))) or (open(f"__pycache__/cimport/{filename.split('.')[0]}.ver").read() != open(filename).read()):
         pre_processor(filename)
         compile_rs(filename)
-    return RustProgram(f"__pycache__/cimport/{filename.split('.')[0]}.compiled")
+    return CProgram(f"__pycache__/cimport/{filename.split('.')[0]}.compiled")
