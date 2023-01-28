@@ -1,6 +1,6 @@
 import time
 from threading import Thread
-from cimport import c_import, rust_import
+from cimport import c_import, rust_import, js_import
 import ctypes
 
 def timeit(f):
@@ -42,6 +42,17 @@ def rust_test():
     run_test(rust_program, "return_int")
     run_test(rust_program, "return_float")
     run_test(rust_program, "return_string", ctypes.c_char_p)
+
+def js_test():
+    js_program = timeit(lambda: js_import("speed_tests.js"))
+    print("took", js_program[1], "seconds to load rust program")
+
+    js_program = js_program[0]
+
+    run_test(js_program, "return_bool")
+    run_test(js_program, "return_int")
+    run_test(js_program, "return_string")
+
 
 TESTS = [
     c_test,
