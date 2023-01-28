@@ -10,7 +10,7 @@ class CppProgram(dict):
         
         super().__init__()
         
-    def get(self, key, _type = ctypes.c_int, arg_type = []):
+    def get(self, key, res_type = ctypes.c_int, arg_type = []):
         if (key != "names") and (key != "_program") and (key in self.__dict__):
             return self.__dict__[key]
         
@@ -21,15 +21,17 @@ class CppProgram(dict):
                 types = f_name.replace(key, "")
                 self.__dict__[key].argtypes = []
 
-                for _type in types:
-                    if _type == "i":
-                        self.__dict__[key].argtypes.append(ctypes.c_int)
-                    elif _type == "f":
-                        self.__dict__[key].argtypes.append(ctypes.c_float)
-                    elif _type == "c":
-                        self.__dict__[key].argtypes.append(ctypes.c_char)
- 
-                self.__dict__[key].argtypes = tuple(self.__dict__[key].argtypes)
+                if arg_type == []:
+                    for _type in types:
+                        if _type == "i":
+                            self.__dict__[key].argtypes.append(ctypes.c_int)
+                        elif _type == "f":
+                            self.__dict__[key].argtypes.append(ctypes.c_float)
+                        elif _type == "c":
+                            self.__dict__[key].argtypes.append(ctypes.c_char)
+                
+                self.__dict__[key].argtypes = tuple(self.__dict__[key].argtypes) if arg_type == [] else arg_type
+                self.__dict__[key].restype = res_type
         
                 return self.__dict__[key]
     def __setattr__(self, __name: str, __value: typing.Any) -> None:
