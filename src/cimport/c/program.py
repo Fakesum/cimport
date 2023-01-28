@@ -54,7 +54,7 @@ class CProgram:
             func = self._program.__getitem__(name)
         
         func.restype = _type
-        func.argtypes = tuple(func.argtypes) if (arg_types == []) else arg_types
+        func.argtypes = arg_types
         
         setattr(self, name, func)
         return func

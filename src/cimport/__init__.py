@@ -1,4 +1,4 @@
-__version__ = "0.2.3b"
+__version__ = "0.2.3c"
 __name__ = "cimport"
 
 from .c import c_import
