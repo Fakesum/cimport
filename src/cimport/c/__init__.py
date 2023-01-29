@@ -3,6 +3,12 @@ import pathlib
 from .compile import compile_c, find_functions
 from .program import CppProgram, CProgram
 
+from ..utils.cache_file import (
+    get_file_path,
+    check_tmp,
+    make_temp_dir
+)
+
 # Function ot import a c/c++ file.
 def c_import(filename: pathlib.Path | str, flags: tuple[list[str], list[str]]=[[], []]) -> CppProgram | CProgram:
     """
@@ -21,15 +27,18 @@ def c_import(filename: pathlib.Path | str, flags: tuple[list[str], list[str]]=[[
             CppProgram, in case of c++ file.
             CProgram, in case of pure c file.
     """
+
+    make_temp_dir()
     
     if not (os.path.exists(filename)):
         raise FileNotFoundError
     
+    
     cpp: bool = filename.split(".")[1] in ['C','cpp', 'c++']
-    if (not os.path.exists(f"""__pycache__/cimport/{filename}.s""")) or (open(f"__pycache__/cimport/{filename}.ver").read() != open(filename).read()):
-        return compile_c(filename, cpp, flags)
+    if check_tmp(filename, ".s"):
+        compile_c(filename, cpp, flags)
     
     if cpp: 
-        return CppProgram(f"__pycache__/cimport/{filename}.compiled", find_functions(filename))
+        return CppProgram(get_file_path(filename+".compiled"), find_functions(filename))
     elif filename.split(".")[1] == 'c':
-        return CProgram(f"__pycache__/cimport/{filename}.compiled")
+        return CProgram(get_file_path(filename+".compiled"))

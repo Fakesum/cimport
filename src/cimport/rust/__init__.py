@@ -2,6 +2,14 @@ import os
 from .compile import compile_rs
 from ..c.program import CProgram
 
+from ..utils.cache_file import (
+    cimport_temp_path,
+    create_version_file,
+    check_version_file,
+    make_temp_dir,
+    get_file_path
+)
+
 def pre_processor(filename):
     lines: list[str] = open(filename, "r+").read().split("\n")
     n_file = ""
@@ -15,7 +23,11 @@ def pre_processor(filename):
     open(filename, "w+").write(n_file)
 
 def rust_import(filename):
-    if (not os.path.exists(os.path.join("__pycache__/cimport", f"""{filename.split(".")[0]}.s"""))) or (open(f"__pycache__/cimport/{filename.split('.')[0]}.ver").read() != open(filename).read()):
+    make_temp_dir()
+    if (not os.path.exists(cimport_temp_path + filename.split(".")[0] + ".s")) or check_version_file(filename):
+        create_version_file(filename)
         pre_processor(filename)
         compile_rs(filename)
-    return CProgram(f"__pycache__/cimport/{filename.split('.')[0]}.compiled")
+    
+    filename = filename.split(".")[0]
+    return CProgram(get_file_path(f"{filename}.compiled"))

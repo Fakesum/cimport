@@ -1,5 +1,7 @@
-from ..command.linux import ConsoleLinux
-from ..command.window import ConsoleWindow
+from ..utils.command.linux import ConsoleLinux
+from ..utils.command.window import ConsoleWindow
+from ..utils.cache_file import get_file_path, clear_temp
+
 import os
 
 def compile_rs(filename):
@@ -9,44 +11,33 @@ def compile_rs(filename):
         console.required_cmd("rustc")
         console.required_cmd("gcc")
 
-        if not (os.path.exists("__pycache__/cimport/")):
-            os.makedirs("__pycache__/cimport/")
-
         console.run_cmd([
             f"rustc", 
             filename, 
             "-o",
-            f"__pycache__/cimport/{filename.split('.')[0]}",
+            get_file_path(filename.split(".")[0]),
             "--emit=obj", "--emit=asm",
             "--crate-type=lib"
         ])
-        
-        filename = filename.split('.')[0]
 
-        console.require_file(f"__pycache__/cimport/{filename}.o")
-        console.require_file(f"__pycache__/cimport/{filename}.s")
+        filename = filename.split(".")[0]
+        
+        console.require_file(get_file_path(f"{filename}.o"))
+        console.require_file(get_file_path(f"{filename}.s"))
 
         console.run_cmd([
             f"gcc",
-            f"__pycache__/cimport/{filename}.o",
+            get_file_path(f"{filename}.o"),
             "-shared",
             "-o",
-            f"__pycache__/cimport/{filename}.compiled"    
+            get_file_path(f"{filename}.compiled")
         ])
 
-        console.require_file(f"__pycache__/cimport/{filename}.compiled")
+        console.require_file(get_file_path(f"{filename}.compiled"))
 
-        console.run_cmd([
-            "rm",
-            "-rf",
-            f"__pycache__/cimport/{filename}.o",
+        clear_temp([
+            get_file_path(f"{filename}.o")
         ])
 
-        console.run_cmd([
-            "cp",
-            "-rf",
-            f"{filename}.rs",
-            f"__pycache__/cimport/{filename}.ver"
-        ])
     else:
         raise NotImplementedError("Comming Soon, Sry") #TODO

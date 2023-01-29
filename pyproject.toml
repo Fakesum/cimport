@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cimport"
-version = "0.3.0b"
+version = "0.3.1rc"
 authors = [
   { name="Fakesum", email="worldanvilbild+github@gmail.com" },
 ]

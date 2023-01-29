@@ -1,10 +1,15 @@
 import js2py
-from importlib.util import spec_from_file_location, module_from_spec
 import os
+from importlib.util import spec_from_file_location, module_from_spec
+from ..utils.cache_file import (
+    check_tmp,
+    get_file_path,
+    make_temp_dir
+)
 
 class JsProgram:
-    def __init__(self, filename, name) -> None:
-        spec = spec_from_file_location(filename.split(".")[0], filename + ".py")
+    def __init__(self, filename) -> None:
+        spec = spec_from_file_location(filename.split(".")[0], filename)
         self._program = module_from_spec(spec)
         spec.loader.exec_module(self._program)
     
@@ -15,7 +20,12 @@ class JsProgram:
         return self.get(__name)
 
 def js_import(filename):
-    if (not (os.path.exists(f"""__pycache__/cimport/{filename + ".py"}"""))) or (open("""""")):
-        js2py.translate_file(filename, filename + ".py")
+    make_temp_dir()
 
-    return JsProgram(filename, filename.split(".")[0])
+    if not(os.path.exists(filename)):
+        raise FileNotFoundError
+    
+    if check_tmp(filename, ".py"):
+        js2py.translate_file(filename, get_file_path(filename+".py"))
+
+    return JsProgram(get_file_path(filename + ".py"))

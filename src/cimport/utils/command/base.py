@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-from .. import __version__, __name__
+from cimport import __version__, __name__
 
 # a Console class
 # with command util
