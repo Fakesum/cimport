@@ -1,5 +1,5 @@
-from ..command.linux import ConsoleLinux
-from ..command.window import ConsoleWindow
+from ..utils.command.linux import ConsoleLinux
+from ..utils.command.window import ConsoleWindow
 from .program import CppProgram, CProgram
 import os
 import re
