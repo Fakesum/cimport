@@ -17,7 +17,7 @@ def c_test():
 
     c_program = c_program[0]
 
-    print(c_program.return_int)
+    run_test(c_program, "return_int")
     run_test(c_program, "return_float")
     run_test(c_program, "return_double")
     run_test(c_program, "return_string", ctypes.c_char_p)
@@ -44,7 +44,7 @@ def rust_test():
     run_test(rust_program, "return_string", ctypes.c_char_p)
 
 def js_test():
-    js_program = timeit(lambda: js_import("speed_tests.js"))
+    js_program = timeit(lambda: js_import("speed_test.js"))
     print("took", js_program[1], "seconds to load rust program")
 
     js_program = js_program[0]
@@ -57,7 +57,8 @@ def js_test():
 TESTS = [
     c_test,
     cpp_test,
-    rust_test
+    rust_test,
+    js_test
 ]
 
 if __name__ == "__main__":
