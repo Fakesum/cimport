@@ -28,11 +28,10 @@ def c_import(filename: pathlib.Path | str, flags: tuple[list[str], list[str]]=[[
             CProgram, in case of pure c file.
     """
 
-    make_temp_dir()
-    
     if not (os.path.exists(filename)):
-        raise FileNotFoundError
+        raise FileNotFoundError(f"{filename} Not Found")
     
+    make_temp_dir(filename)
     
     cpp: bool = filename.split(".")[1] in ['C','cpp', 'c++']
     if check_tmp(filename, ".s"):

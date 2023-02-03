@@ -23,7 +23,9 @@ def pre_processor(filename):
     open(filename, "w+").write(n_file)
 
 def rust_import(filename):
-    make_temp_dir()
+    if not os.path.exists(filename):
+        raise FileNotFoundError(f"{filename} Not found")
+    make_temp_dir(filename)
     if (not os.path.exists(cimport_temp_path + filename.split(".")[0] + ".s")) or check_version_file(filename):
         create_version_file(filename)
         pre_processor(filename)

@@ -1,28 +1,35 @@
 import os
+import pathlib
 
 cimport_temp_path = "__pycache__/cimport/"
 
 def check_version_file(filename):
-    ver_file = cimport_temp_path + filename + ".ver"
+    file = pathlib.Path(filename)
+    ver_file = os.path.join(file.parent.absolute().__str__(), cimport_temp_path, file.name+ ".ver")
     if not os.path.exists(ver_file):
         return True
-    return open(filename).read() != open(ver_file).read()
+    return open(file.absolute().__str__()).read() != open(ver_file).read()
 
 def create_version_file(filename):
-    ver_file = cimport_temp_path + filename + ".ver"
-    open(ver_file, "w+").write(open(filename).read())
+    file = pathlib.Path(filename)
+    ver_file = os.path.join(file.parent.absolute().__str__(), cimport_temp_path, file.name+ ".ver")
+    open(ver_file, "a+").write(open(file.absolute().__str__()).read())
 
 def get_file_path(filename):
-    return cimport_temp_path + filename
+    file = pathlib.Path(filename)
+    return os.path.join(file.parent.absolute().__str__(), cimport_temp_path, file.name)
 
-def make_temp_dir():
+def make_temp_dir(filename):
+    file = pathlib.Path(filename)
+    print(filename)
     try:
-        os.makedirs(cimport_temp_path)
+        os.makedirs(os.path.join(file.parent.absolute().__str__(), cimport_temp_path))
     except OSError as e:
-        pass
+        print(e)
 
-def check_tmp(filename, ext, split=False):
-    if (not os.path.exists(cimport_temp_path + filename + ext)) or check_version_file(filename):
+def check_tmp(filename, ext):
+    file = pathlib.Path(filename)
+    if (not os.path.exists(os.path.join(file.parent.absolute().__str__(), cimport_temp_path, file.name+ ext))) or check_version_file(filename):
         create_version_file(filename)
         return True
     
@@ -31,6 +38,6 @@ def check_tmp(filename, ext, split=False):
 def clear_temp(files):
     for file in files:
         try:
-            os.remove(cimport_temp_path + file)
+            os.remove(os.path.join(cimport_temp_path, file))
         except OSError as e:
             pass

@@ -20,10 +20,10 @@ class JsProgram:
         return self.get(__name)
 
 def js_import(filename):
-    make_temp_dir()
-
     if not(os.path.exists(filename)):
-        raise FileNotFoundError
+        raise FileNotFoundError(f"{filename} Not Found")
+
+    make_temp_dir(filename)
     
     if check_tmp(filename, ".py"):
         js2py.translate_file(filename, get_file_path(filename+".py"))
