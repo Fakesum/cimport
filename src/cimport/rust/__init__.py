@@ -1,4 +1,5 @@
 import os
+import pathlib
 from .compile import compile_rs
 from ..c.program import CProgram
 
@@ -25,8 +26,11 @@ def pre_processor(filename):
 def rust_import(filename):
     if not os.path.exists(filename):
         raise FileNotFoundError(f"{filename} Not found")
+    
     make_temp_dir(filename)
-    if (not os.path.exists(cimport_temp_path + filename.split(".")[0] + ".s")) or check_version_file(filename):
+    file = pathlib.Path(filename)
+
+    if (not os.path.exists(os.path.join(file.parent.absolute().__str__(), cimport_temp_path, file.name.split(".")[0] + ".s"))) or check_version_file(filename):
         create_version_file(filename)
         pre_processor(filename)
         compile_rs(filename)

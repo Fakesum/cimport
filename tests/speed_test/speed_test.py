@@ -45,7 +45,7 @@ def rust_test():
 
 def js_test():
     js_program = timeit(lambda: js_import("tests/speed_test.js"))
-    print("took", js_program[1], "seconds to load rust program")
+    print("took", js_program[1], "seconds to load js program")
 
     js_program = js_program[0]
 
